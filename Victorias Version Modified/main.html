@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html>
+
+<style>
+#container {
+  width: 400px;
+  height: 400px;
+ /* background: grey;*/
+  margin-top:0px;
+  margin-left:0px;
+  border:solid 20px black;
+  background-color: yellow;
+
+  
+
+}
+#truck {
+  width: 20px;
+  height: 20px;
+ position: absolute;
+
+
+
+}
+#gameOverText {
+
+ position: absolute;
+ text-align:center;
+ margin-top:185px;
+  margin-left:85px;
+
+
+}
+/* #body1{
+   
+    position: absolute;
+
+    width: 20px;
+    height: 20px;
+    background-color: black;
+    margin-top: 100px;
+    margin-left: 50px ;
+    background-color: black;
+} */
+</style>
+<body >
+  <!-- onload="getFocus()" -->
+<div id="score"></div>
+<div id="timer"></div>
+<button type="button" id="startButton" onclick="getFocus()" style="margin-left: 180px; margin-top: 180px; position: absolute;">startGame</button>
+<!-- <div id="body1" style=""></div> -->
+
+<div id ="container" style="position: inherit;">
+
+</div >
+  <input type="text" size="50" onkeypress="uniCharCode(event)"  onkeydown="uniKeyCode(event)" id="myTextField" value="use keys arrows" > 
+
+<p><span id="demo3" > </span></p>
+<p><span id="showtruckXCoordinate" >  </span></p>
+<p><span id="showtruckYCoordinate"> </span></p>
+
+
+
+
+
+
+<script>
+document.getElementById('container').innerHTML = '<div id ="truck"><image height="20" id="truckImage" width="20"src="https://mlpvy1eoggxa.i.optimole.com/w:auto/h:auto/q:auto/http://www.awesomeplumbingservices.com/wp-content/uploads/2019/08/truck-clipart-png-3.png"></div><h1 id="gameOverText"></h1>';
+const wallHeight=400;
+const wallWidth=400;
+const truckWidth=20;
+const truckHeight=20;
+const truckTravelMax_xy=wallHeight-truckHeight;
+//const truckTravelMax_y=wallWidth-truckWidth;
+const truckTravelMin_xy=0;
+//const truckTravelMin_y=0;
+var truckSpeed=500;
+const pxPerOneGrid=20;
+var truck_x=(wallWidth/2)-truckWidth;	//this is the center
+var truck_y=(wallHeight/2)-truckHeight;  //this is the center
+var truckTopMargin= document.getElementById("truck").style.marginTop = truck_y+"px";
+var truckLeftMargin= document.getElementById("truck").style.marginLeft = truck_x+"px";
+var gameOverInnerHTML="";
+var gameActive=false;
+function getFocus() 
+{       
+  timer();    
+	gameActive=true;
+  document.getElementById("startButton").style.display="none";
+  document.getElementById("myTextField").focus();
+
+}
+var autoMoveDirection=setInterval(autoMove, 50);
+var key;
+function uniKeyCode(event) 
+{
+ key = event.keyCode;
+
+  
+  switch(key)
+  {
+     case 40:
+         
+       	if (truck_y>truckTravelMax_xy) //cant be 400 because hight and width of circle is 30px
+              break;
+       	clearInterval(autoMoveDirection)
+      	autoMoveDirection=setInterval(autoMove, truckSpeed);
+        truck_y+=pxPerOneGrid;
+        document.getElementById("truck").style.marginTop = truck_y+"px";
+      //  document.getElementById("truckImage").style.transform='rotate(90deg)';
+                                
+
+       
+        break;
+    case 39:
+        console.log(39);
+        clearInterval(autoMoveDirection)
+        autoMoveDirection=setInterval(autoMove, truckSpeed);
+
+    	if (truck_x>truckTravelMax_xy)
+     		break;
+        truck_x+=pxPerOneGrid;
+
+       // document.getElementById("truckImage").style.transform='rotate(0deg)';
+       document.getElementById("truck").style.marginLeft = truck_x+"px";
+
+    	
+
+        break;
+
+    case 38:
+        console.log(38);
+    	clearInterval(autoMoveDirection)
+    	autoMoveDirection=setInterval(autoMove, truckSpeed);
+    	if (truck_y<truckTravelMin_xy)
+     		break;
+       truck_y-=pxPerOneGrid;
+        document.getElementById("truck").style.marginTop = truck_y+"px";        
+       // document.getElementById("truck").style.marginLeft = truck_x+"px";                      					document.getElementById("truckImage").style.transform='rotate(-90deg)';
+
+        break;
+    case 37:
+    	clearInterval(autoMoveDirection)
+    	autoMoveDirection=setInterval(autoMove, truckSpeed);
+    	if (truck_x<=truckTravelMin_xy)
+     		break;
+        truck_x-=pxPerOneGrid;
+        document.getElementById("truck").style.marginLeft = truck_x+"px";
+//        document.getElementById("truckImage").style.transform='scale(-1, -1)';//fix this later
+        break;
+     default:
+         
+         break;
+
+  }
+  checkPickUp(truck_x,truck_y);
+
+
+}
+function autoMove(x){  
+	if(key==40)
+      {
+      truck_y+=pxPerOneGrid;
+      document.getElementById("truck").style.marginTop = truck_y+"px"; 
+      if (truck_y>truckTravelMax_xy) //cant be 400 because hight and width of circle is 30px
+        {
+      	clearInterval(autoMoveDirection);
+        gameOver();
+      }
+      }
+   	if(key==38)
+      {
+        truck_y-=pxPerOneGrid;
+        document.getElementById("truck").style.marginTop = truck_y+"px"; 
+
+        if (truck_y<truckTravelMin_xy) //cant be 400 because hight and width of circle is 30px
+            {
+      	        clearInterval(autoMoveDirection);
+                gameOver();
+            }
+      }
+  	if(key==39)
+      {
+      truck_x+=pxPerOneGrid;
+      document.getElementById("truck").style.marginLeft = truck_x+"px"; 
+      if (truck_x>truckTravelMax_xy) //cant be 400 because hight and width of circle is 30px
+      {
+      	clearInterval(autoMoveDirection);
+        gameOver();
+      }
+        
+      }
+    if(key==37)
+      {
+      truck_x-=pxPerOneGrid;
+      document.getElementById("truck").style.marginLeft = truck_x+"px"; 
+      if (truck_x<truckTravelMin_xy) //cant be 400 because hight and width of circle is 30px
+           {
+      	clearInterval(autoMoveDirection);
+        gameOver();
+      }
+      }
+         document.getElementById("showtruckXCoordinate").innerHTML = "truck x coordinate: "+truck_x;
+        document.getElementById("showtruckYCoordinate").innerHTML = "truck y coordinate: "+truck_y;
+        checkPickUp(truck_x,truck_y);
+      
+}
+/*===================================
+  check if truck picked up luggage
+=====================================*/
+var bodyCount=0;
+var randLugObj={x:"",y:"",id:""};
+var randLugArr=[];
+var overLap=true;
+var randX;
+var randY;
+var scoreCount=0;
+function checkPickUp(x,y)
+{
+  for (let index = 0; index < randLugArr.length; index++) 
+      {
+          if(x==randLugArr[index].x && y==randLugArr[index].y)
+          {
+              var removeLuggage=document.getElementById("randLug"+ randLugArr[index].id);
+
+              removeLuggage.remove();
+
+              randLugArr.splice(index, 1); 
+              console.log(randLugArr);
+              score();
+              randLuggage();
+
+              break;
+          }
+      }
+}
+/*===================================
+          inject luggage html
+=====================================*/
+function randLuggage()
+{
+    bodyCount++;
+    //create injected html
+    var randlug="<p id='randLug"+bodyCount+"' style='width:20px; height:20px; border: solid black 1px; position: absolute;'>"+bodyCount+"</p>"; 
+    document.getElementById("container").innerHTML +=  randlug;
+    randomCoordinates();
+    while(overLap==true && randLugArr.length>0 )
+    {       
+        randomCoordinates();
+        for (let index = 0; index < randLugArr.length; index++) 
+        {
+            if((randX==randLugArr[index].x && randY==randLugArr[index].y))
+            {
+                overLap=true;
+                break;
+            }
+            else
+            {
+                overLap=false;
+            }
+                   
+        }
+    }
+
+    //set coordinates for random luggage
+    document.getElementById("randLug"+bodyCount).style.marginLeft=randX+'px';
+    document.getElementById("randLug"+bodyCount).style.marginTop=randY+'px';
+
+    //push luggage object to random luggage array
+    randLugObj={x:randX,y:randY,id:bodyCount};
+    randLugArr.push(randLugObj);
+    console.log(randLugArr);
+    
+    if (bodyCount==6)
+      bodyCount=0;
+
+
+}
+
+/*===================================
+      Generate random coordinates
+=====================================*/
+function randomCoordinates()
+    {
+        randX=(Math.floor(Math.random() * 401))
+        randX=randX-(randX%pxPerOneGrid);
+        randY=(Math.floor(Math.random() * 401));
+        randY=randY-(randY%pxPerOneGrid);
+    }
+/*===================================
+                Timer
+=====================================*/
+var min=3;
+var sec=60;
+var minString;
+var secString;
+document.getElementById("timer").innerHTML="0"+min+" : 00";
+//pause function
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+function timer()
+{
+    if(sec==60)
+    {
+      secString="00";
+      min--;
+      randLuggage();
+
+    }
+    else if(sec<10)
+    {
+      secString="0"+sec;
+
+    }
+    else
+    {
+      secString=sec;
+    }
+    sec--;
+    
+    if (sec==0)
+    {
+      sec=60;
+    }
+    minString="0"+min;
+    document.getElementById("timer").innerHTML=minString+" : "+secString;
+
+  if(min!=-1)
+  {
+    sleep(250).then(() => { timer() });
+  }
+  else
+  {
+    document.getElementById("timer").innerHTML="00 : 00";
+    gameOver();
+  }
+}
+
+document.getElementById("score").innerHTML="score: "+0;
+
+/*===================================
+                Score
+=====================================*/
+function score()
+{
+  scoreCount+=100;
+  document.getElementById("score").innerHTML="score: "+scoreCount;
+}
+
+/*===================================
+                  End game
+=====================================*/
+function gameOver()
+{					
+document.getElementById("truckImage").style.display='none';document.getElementById("truck").style.backgroundColor='red';
+
+gameOverInnerHTML=document.getElementById("gameOverText").innerHTML="GAME OVER";
+}
+        
+
+</script>
+
+</body>
+</html>
