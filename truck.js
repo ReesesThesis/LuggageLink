@@ -21,7 +21,7 @@ export function update() {
     }
 
     truckBody[0].x += inputDirection.x
-    truckBody[0].y += inputDirection.y 
+    truckBody[0].y += inputDirection.y
 }
 
 export function render(gameBoard) {
