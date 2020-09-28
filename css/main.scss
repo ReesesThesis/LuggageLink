@@ -1,0 +1,100 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Ranchers&display=swap');
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: rgb(219, 219, 219);
+    color: rgb(31, 31, 31);
+    font-family: 'Ranchers';
+    letter-spacing: 1px;
+} 
+
+a {
+    color: rgb(31, 31, 31);
+    text-decoration: none;
+}
+
+ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.wrapper {
+    padding: 1.5em;
+    max-width: 1800px;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.menu-link {
+    font-family: 'Ranchers';
+    font-size: 36px;
+    font-weight: bold;
+    color: rgb(31, 31, 31);
+    letter-spacing: 5px;
+}
+
+.header-content {
+    width: 50%;
+    margin: 0 auto;
+    text-align: center;
+    border: 5px dotted;
+    border-color: aqua;
+    h1 {
+        font-family: 'Ranchers';
+        font-size: 48px;
+        letter-spacing: 10px;
+    }
+}
+
+.nav-wrapper {
+    width: 65%;
+    margin: 10em auto;
+    align-content: center;
+    align-items: center;
+    ul {
+        display: flex;
+        justify-content: space-between;
+    }
+}
+
+.main-wrapper {
+    justify-content: center;
+    align-items: center;
+}
+
+.active-game-wrapper {
+    max-width: 1800px;
+    margin: 0 auto;
+    margin-top: 1.5em;
+}
+
+#game-board {
+    display: grid;
+    width: 85vmin;
+    height: 85vmin;
+    margin: 0 auto;
+    background-color: rgb(75, 75, 75);
+    grid-template-rows: repeat(21, 1fr);
+    grid-template-columns: repeat(21, 1fr);
+}
+
+.truck {
+    background-image: url(../images/BaggageTruck.png);
+    max-width: 21px;
+}
+
+.baggage {
+    background-image: url(../images/Baggage.png)
+}
+
+.car {
+    background-image: url(../images/BaggageCar.png)
+}
