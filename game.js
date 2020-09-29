@@ -3,17 +3,26 @@ import { update as updateBaggage, render as renderBaggage } from './baggage.js'
 import { outsideGrid } from './grid.js'
 
 let lastRenderTime = 0
-let gameOver = false
+export let gameOver = false
+
+
 
 const gameBoard = document.getElementById('game-board')
 
-function main(currentTime) {
+export function main(currentTime) {
     if (gameOver) {
+
         if (confirm('You lost. Press ok to restart')) {
-            window.location = '/'
-        }
+            location.reload()
+        }    
+        else
+        {
+            window.location = '/'  
+        }      
         return
     }
+
+    
 
     window.requestAnimationFrame(main)
     const secondsSinceLastRender = (currentTime - lastRenderTime) / 1000
@@ -21,6 +30,7 @@ function main(currentTime) {
         return
 
     lastRenderTime = currentTime
+    
 
 
     update()
@@ -34,6 +44,8 @@ function update() {
     updateBaggage()
     checkDeath()
 }
+
+
 
 function render() {
     gameBoard.innerHTML = ''
