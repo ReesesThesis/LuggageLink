@@ -1,6 +1,13 @@
 import { getInputDirection } from "./input.js"
 
+const countDown = document.querySelector('#timer-output')
+export const score     = document.querySelector('#score-output')
+
 export const TRUCK_SPEED = 5
+let gameStarted = false;
+let threeMinutes = 10
+export let round = 1
+
 const truckBody = [
     { x: 11, y: 11 }
 ]
@@ -18,12 +25,30 @@ export function update() {
 }
 
 export function render(gameBoard) {
+    let count = 1;
     truckBody.forEach(segment => {
-        const truckElement = document.createElement('div')
-        truckElement.style.gridRowStart = segment.y
-        truckElement.style.gridColumnStart = segment.x
-        truckElement.classList.add('truck')
-        gameBoard.appendChild(truckElement)
+        if(count === 1)
+        {
+            const truckElement = document.createElement('div')
+            truckElement.style.gridRowStart = segment.y
+            truckElement.style.gridColumnStart = segment.x
+            truckElement.classList.add('truck')
+            gameBoard.appendChild(truckElement)
+            count++;
+        }
+        else
+        {
+            if(gameStarted === false)
+            {
+                startTimer(threeMinutes, countDown)
+                gameStarted = true
+            }
+            const truckElement = document.createElement('div')
+            truckElement.style.gridRowStart = segment.y
+            truckElement.style.gridColumnStart = segment.x
+            truckElement.classList.add('car')
+            gameBoard.appendChild(truckElement)
+        }
     })
 }
 
@@ -56,4 +81,37 @@ function addSegments() {
     }
 
     newSegments = 0
+}
+
+function startTimer(duration, display) {
+    let num = 0
+    var timer = duration, minutes, seconds;
+    setInterval(function () {
+        minutes = parseInt(timer / 60, 10);
+        seconds = parseInt(timer % 60, 10);
+
+        minutes = minutes < 10 ? "0" + minutes : minutes;
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+
+        display.textContent = minutes + ":" + seconds;
+        
+        num = parseInt(score.innerHTML)
+        num += 1
+        score.innerHTML = num.toString()
+        if (--timer <= -1) {
+            round++
+            timer = duration
+            if(round == 6)
+            {               
+                if(confirm("You Won!"))
+                {
+                    location.reload()
+                }    
+                else
+                {
+                    window.location = '/'  
+                }          
+            }
+        }
+    }, 1000);
 }

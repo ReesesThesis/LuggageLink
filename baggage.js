@@ -1,8 +1,9 @@
-import { onTruck, expandTruck } from './truck.js'
+import { onTruck, expandTruck, score, round} from './truck.js'
 import { randomGridPosition } from './grid.js'
 
 let baggage = getRandomBaggagePosition()
 const EXPANSION_RATE = 1
+let notStarted = true
 
 export function update() {
     if (onTruck(baggage)) {
@@ -24,8 +25,20 @@ export function render(gameBoard) {
 
 function getRandomBaggagePosition() {
     let newBaggagePosition
+    let number = parseInt(score.innerHTML)
     while (newBaggagePosition == null || onTruck(newBaggagePosition)) {
+        
         newBaggagePosition = randomGridPosition()
+        
     }
+    
+    if(parseInt(score.innerHTML) == 0)
+    {
+        return newBaggagePosition
+    }    
+
+    number += (15 * round)
+    score.innerHTML = number.toString()
+    
     return newBaggagePosition
 }
